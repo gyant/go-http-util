@@ -10,13 +10,16 @@ import (
 )
 
 type APIClient interface {
+	getBaseURL() *url.URL
+	getHTTPClient() *http.Client
+	getUserAgent() string
 }
 
 type HTTPUtil struct{}
 
 func (h *HTTPUtil) newRequest(c APIClient, method, path string, body interface{}) (*http.Request, error) {
 	rel := &url.URL{Path: path}
-	u := c.BaseURL.ResolveReference(rel)
+	u := c.getBaseURL().ResolveReference(rel)
 	var buf io.ReadWriter
 	if body != nil {
 		buf = new(bytes.Buffer)
@@ -33,12 +36,12 @@ func (h *HTTPUtil) newRequest(c APIClient, method, path string, body interface{}
 		req.Header.Set("Content-Type", "application/json")
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", c.UserAgent)
+	req.Header.Set("User-Agent", c.getUserAgent())
 	return req, nil
 }
 
 func (h *HTTPUtil) do(c APIClient, req *http.Request, v interface{}) (*http.Response, error) {
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.getHTTPClient().Do(req)
 	if err != nil {
 		return nil, err
 	}
