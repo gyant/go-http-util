@@ -17,7 +17,7 @@ type APIClient interface {
 
 type HTTPUtil struct{}
 
-func (h *HTTPUtil) newRequest(c APIClient, method, path string, body interface{}) (*http.Request, error) {
+func (h *HTTPUtil) NewRequest(c APIClient, method, path string, body interface{}) (*http.Request, error) {
 	rel := &url.URL{Path: path}
 	u := c.getBaseURL().ResolveReference(rel)
 	var buf io.ReadWriter
@@ -40,7 +40,7 @@ func (h *HTTPUtil) newRequest(c APIClient, method, path string, body interface{}
 	return req, nil
 }
 
-func (h *HTTPUtil) do(c APIClient, req *http.Request, v interface{}) (*http.Response, error) {
+func (h *HTTPUtil) Do(c APIClient, req *http.Request, v interface{}) (*http.Response, error) {
 	resp, err := c.getHTTPClient().Do(req)
 	if err != nil {
 		return nil, err
@@ -54,6 +54,6 @@ func (h *HTTPUtil) do(c APIClient, req *http.Request, v interface{}) (*http.Resp
 	return resp, err
 }
 
-func (h *HTTPUtil) test() {
+func (h *HTTPUtil) Test() {
 	fmt.Println("OH HI FROM HTTPUTIL TEST.")
 }
