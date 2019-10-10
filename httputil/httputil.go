@@ -54,6 +54,7 @@ func (h *HTTPUtil) Do(c APIClient, req *http.Request, v interface{}) (*http.Resp
 	return resp, err
 }
 
-func (h *HTTPUtil) Test() {
+func (h *HTTPUtil) Test(c APIClient) {
 	fmt.Println("OH HI FROM HTTPUTIL TEST.")
+	fmt.Println(c.getUserAgent())
 }
